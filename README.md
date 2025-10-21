@@ -1,3 +1,2 @@
 # x-and-o
-game 
- x
+pretty much hard game 
