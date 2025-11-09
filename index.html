@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - Play Against Computer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo">
+                <div class="logo-x">X</div>
+                <div class="logo-o">O</div>
+            </div>
+            <div class="preloader-text">Loading Game...</div>
+            <div class="preloader-spinner">
+                <div class="spinner-dot"></div>
+                <div class="spinner-dot"></div>
+                <div class="spinner-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header-controls">
+            <h1>Tic Tac Toe</h1>
+            <div class="header-buttons">
+                <button id="leaderboardToggle" class="icon-btn" title="Leaderboard"><i class="fas fa-trophy"></i></button>
+                <button id="soundToggle" class="sound-toggle" title="Toggle Sound"><i class="fas fa-volume-up"></i></button>
+            </div>
+        </div>
+        <p class="subtitle">You are <span class="player-x">X</span> | Computer is <span class="player-o">O</span></p>
+        <div class="difficulty-selector">
+            <label for="difficulty">Difficulty:</label>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+                <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+            </div>
+        </div>
+        <div id="status" class="status">Your Turn</div>
+        <div class="game-board" id="gameBoard">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <div class="game-footer">
+            <button id="restart" class="btn-restart"><i class="fas fa-sync-alt"></i> New Game</button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboard" class="leaderboard hidden">
+        <div class="leaderboard-content">
+            <div class="leaderboard-header">
+                <h2>Leaderboard</h2>
+                <button id="closeLeaderboard" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="leaderboard-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Wins</span>
+                    <span id="statWins" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Losses</span>
+                    <span id="statLosses" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Draws</span>
+                    <span id="statDraws" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Win Rate</span>
+                    <span id="statWinRate" class="stat-value">0%</span>
+                </div>
+            </div>
+            <div class="leaderboard-actions">
+                <button id="resetStats" class="btn-reset"><i class="fas fa-redo"></i> Reset Stats</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notification" class="notification hidden">
+        <div class="notification-content">
+            <div class="notification-icon" id="notificationIcon"></div>
+            <h2 id="notificationTitle"></h2>
+            <p id="notificationMessage"></p>
+            <button id="notificationBtn" class="btn-notification"><i class="fas fa-redo"></i> Play Again</button>
+        </div>
+    </div>
+
+    <div id="markSelect" class="mark-select hidden">
+        <div class="mark-select-content">
+            <h2>Choose Your Mark</h2>
+            <div class="mark-select-buttons">
+                <button id="chooseX" class="mark-btn">X</button>
+                <button id="chooseO" class="mark-btn">O</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
