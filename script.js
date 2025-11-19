@@ -34,7 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerXSpan = document.querySelector('.player-x');
     const playerOSpan = document.querySelector('.player-o');
     const installBtn = document.getElementById('installBtn');
-    
+    const onboarding = document.getElementById('onboarding');
+    const settingsModal = document.getElementById('settingsModal');
+    const settingsToggle = document.getElementById('settingsToggle');
+    const closeSettings = document.getElementById('closeSettings');
+    const settingSound = document.getElementById('settingSound');
+    const settingTheme = document.getElementById('settingTheme');
+    const settingMusic = document.getElementById('settingMusic');
+    const nextSlideBtn = document.getElementById('nextSlideBtn');
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+
     // Game State
     let gameActive = true;
     let currentPlayer = 'X'; // Human is X, Computer is O
@@ -61,13 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const SoundManager = {
         audioContext: null,
         audioInitialized: false,
-        
+
         init() {
             // AudioContext will be initialized on first user interaction
             // This is required by browser autoplay policies
             return true;
         },
-        
+
         ensureAudioContext() {
             // Initialize AudioContext on first user interaction
             if (!this.audioContext) {
@@ -79,44 +89,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     return false;
                 }
             }
-            
+
             // Resume AudioContext if it's suspended (required by some browsers)
             if (this.audioContext.state === 'suspended') {
                 this.audioContext.resume().catch(e => {
                     console.warn('Could not resume audio context:', e);
                 });
             }
-            
+
             return true;
         },
-        
+
         // Generate a tone
         playTone(frequency, duration, type = 'sine', volume = 0.3) {
             if (!soundEnabled) return;
-            
+
             // Initialize audio context on first use (user interaction required)
             if (!this.ensureAudioContext()) return;
-            
+
             try {
                 const oscillator = this.audioContext.createOscillator();
                 const gainNode = this.audioContext.createGain();
-                
+
                 oscillator.connect(gainNode);
                 gainNode.connect(this.audioContext.destination);
-                
+
                 oscillator.frequency.value = frequency;
                 oscillator.type = type;
-                
+
                 gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
-                
+
                 oscillator.start(this.audioContext.currentTime);
                 oscillator.stop(this.audioContext.currentTime + duration);
             } catch (e) {
                 console.warn('Error playing sound:', e);
             }
         },
-        
+
         // Play a click sound (for placing marks)
         playClick(player = 'X') {
             if (player === 'X') {
@@ -127,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.playTone(400, 0.1, 'sine', 0.2);
             }
         },
-        
+
         // Play win sound
         playWin() {
             // Play a celebratory sequence
@@ -139,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.playTone(784, 0.2, 'sine', 0.3); // G
             }, 200);
         },
-        
+
         // Play draw sound
         playDraw() {
             // Neutral sound
@@ -148,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.playTone(392, 0.3, 'sine', 0.2);
             }, 150);
         },
-        
+
         // Play button click sound
         playButtonClick() {
             this.playTone(300, 0.05, 'square', 0.15);
@@ -158,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.playTone(880, 0.08, 'sine', 0.25);
             setTimeout(() => this.playTone(1200, 0.08, 'sine', 0.2), 80);
         },
-        
+
         // Play notification sound
         playNotification() {
             this.playTone(800, 0.15, 'sine', 0.25);
@@ -166,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.playTone(600, 0.15, 'sine', 0.25);
             }, 100);
         },
-        
+
         // Play error/warning sound
         playError() {
             this.playTone(200, 0.2, 'sawtooth', 0.2);
@@ -266,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             statWins.textContent = leaderboardData.wins;
             statLosses.textContent = leaderboardData.losses;
             statDraws.textContent = leaderboardData.draws;
-            
+
             const totalGames = leaderboardData.wins + leaderboardData.losses + leaderboardData.draws;
             if (totalGames > 0) {
                 const winRate = Math.round((leaderboardData.wins / totalGames) * 100);
@@ -313,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
             SoundManager.playButtonClick();
         }
     }
-    
+
     // Winning Combinations
     const winningConditions = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
@@ -326,16 +336,16 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState[cellIndex] = player;
         cell.textContent = player;
         cell.classList.add(player.toLowerCase());
-        
+
         // Add glow effect
         cell.classList.add('glow');
         spawnParticles(cell, player);
-        
+
         // Remove glow after animation completes (800ms for the animation)
         setTimeout(() => {
             cell.classList.remove('glow');
         }, 800);
-        
+
         // Play click sound
         SoundManager.playClick(player);
     }
@@ -349,12 +359,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return { status: 'win', player: gameState[a], cells: [a, b, c] };
             }
         }
-        
+
         // Check for draw
         if (!gameState.includes('')) {
             return { status: 'draw' };
         }
-        
+
         return { status: 'continue' };
     }
 
@@ -392,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show notification modal
     function showNotification(type, player = null) {
         notification.classList.remove('hidden');
-        
+
         if (type === 'win') {
             if (player === humanPlayer) {
                 notificationIcon.innerHTML = '<i class="fas fa-trophy"></i>';
@@ -441,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function wouldWin(board, player, move) {
         const testBoard = [...board];
         testBoard[move] = player;
-        
+
         // Check for winner directly without modifying global state
         for (let condition of winningConditions) {
             const [a, b, c] = condition;
@@ -510,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState = board;
         const result = checkGameStatus();
         gameState = tempState;
-        
+
         if (result.status === 'win') {
             if (result.player === computerPlayer) return { score: 10 - depth };
             if (result.player === humanPlayer) return { score: depth - 10 };
@@ -520,13 +530,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isMaximizing) {
             let bestScore = -Infinity;
             let bestMove = -1;
-            
+
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === '') {
                     board[i] = computerPlayer;
                     let score = minimax(board, depth + 1, false).score;
                     board[i] = '';
-                    
+
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = i;
@@ -537,13 +547,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             let bestScore = Infinity;
             let bestMove = -1;
-            
+
             for (let i = 0; i < board.length; i++) {
                 if (board[i] === '') {
                     board[i] = humanPlayer;
                     let score = minimax(board, depth + 1, true).score;
                     board[i] = '';
-                    
+
                     if (score < bestScore) {
                         bestScore = score;
                         bestMove = i;
@@ -562,18 +572,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Computer makes a move based on difficulty
     function computerMove() {
         if (!gameActive || isComputerThinking) return;
-        
+
         isComputerThinking = true;
         gameBoard.classList.add('disabled');
         statusDisplay.textContent = "Computer's Turn...";
         statusDisplay.classList.add('thinking');
-        
+
         // Delay for better UX (shorter delay for easy mode)
         const delay = difficulty === 'easy' ? 300 : difficulty === 'medium' ? 500 : 600;
-        
+
         setTimeout(() => {
             let move = -1;
-            
+
             // Choose AI strategy based on difficulty
             switch (difficulty) {
                 case 'easy':
@@ -586,13 +596,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     move = hardAIMove(gameState);
                     break;
             }
-            
+
             if (move !== -1 && gameState[move] === '') {
                 const cell = cells[move];
                 placeMark(cell, move, computerPlayer);
-                
+
                 const result = checkGameStatus();
-                
+
                 if (result.status === 'win') {
                     highlightWinningCells(result.cells);
                     gameActive = false;
@@ -613,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gameBoard.classList.remove('disabled');
                 }
             }
-            
+
             isComputerThinking = false;
         }, delay);
     }
@@ -621,24 +631,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle player's move
     function handleCellClick(e) {
         if (!gameActive || currentPlayer !== humanPlayer || isComputerThinking) return;
-        
+
         const clickedCell = e.target;
         if (!clickedCell.classList.contains('cell')) return;
-        
+
         const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
-        
+
         if (gameState[clickedCellIndex] !== '') {
             // Play error sound if clicking on occupied cell
             SoundManager.playError();
             return;
         }
-        
+
         placeMark(clickedCell, clickedCellIndex, humanPlayer);
         addCoins(1);
         if (typeof spendEnergy === 'function') spendEnergy(1);
-        
+
         const result = checkGameStatus();
-        
+
         if (result.status === 'win') {
             highlightWinningCells(result.cells);
             gameActive = false;
@@ -666,10 +676,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState = ['', '', '', '', '', '', '', '', ''];
         isComputerThinking = false;
         hideNotification();
-        
+
         // Play button click sound
         SoundManager.playButtonClick();
-        
+
         cells.forEach(cell => {
             cell.textContent = '';
             cell.classList.remove('x', 'o', 'winner', 'glow');
@@ -677,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const existingLine = gameBoard.querySelector('.win-line');
         if (existingLine) existingLine.remove();
         gameBoard.querySelectorAll('.particle').forEach(p => p.remove());
-        
+
         if (currentPlayer === humanPlayer) {
             statusDisplay.textContent = 'Your Turn';
             statusDisplay.classList.remove('thinking');
@@ -693,10 +703,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle difficulty selection
     function handleDifficultyChange(selectedDifficulty) {
         difficulty = selectedDifficulty;
-        
+
         // Play button click sound
         SoundManager.playButtonClick();
-        
+
         // Update active button
         difficultyButtons.forEach(btn => {
             if (btn.dataset.difficulty === selectedDifficulty) {
@@ -705,12 +715,87 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.remove('active');
             }
         });
-        
+
         // Reset game when difficulty changes
         if (gameActive || !gameState.every(cell => cell === '')) {
             resetGame();
         }
     }
+
+    // Onboarding Logic
+    function initOnboarding() {
+        if (!localStorage.getItem('hasSeenOnboarding')) {
+            onboarding.classList.remove('hidden');
+            let currentSlide = 0;
+
+            function updateSlide(index) {
+                slides.forEach(s => s.classList.remove('active'));
+                dots.forEach(d => d.classList.remove('active'));
+                slides[index].classList.add('active');
+                dots[index].classList.add('active');
+
+                if (index === slides.length - 1) {
+                    nextSlideBtn.textContent = 'Start Playing';
+                } else {
+                    nextSlideBtn.textContent = 'Next';
+                }
+            }
+
+            nextSlideBtn.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateSlide(currentSlide);
+                } else {
+                    onboarding.classList.add('hidden');
+                    localStorage.setItem('hasSeenOnboarding', 'true');
+                    SoundManager.ensureAudioContext();
+                    SoundManager.playButtonClick();
+                }
+            });
+        }
+    }
+
+    // Settings Logic
+    function initSettings() {
+        // Sync toggles with current state
+        if (settingSound) settingSound.checked = soundEnabled;
+        if (settingTheme) settingTheme.checked = activeTheme === 'neon';
+
+        settingsToggle.addEventListener('click', () => {
+            settingsModal.classList.remove('hidden');
+            SoundManager.playButtonClick();
+        });
+
+        closeSettings.addEventListener('click', () => {
+            settingsModal.classList.add('hidden');
+            SoundManager.playButtonClick();
+        });
+
+        settingSound.addEventListener('change', (e) => {
+            soundEnabled = e.target.checked;
+            localStorage.setItem('ticTacToeSoundEnabled', soundEnabled.toString());
+            if (soundEnabled) {
+                SoundManager.ensureAudioContext();
+                SoundManager.playButtonClick();
+            }
+        });
+
+        settingTheme.addEventListener('change', (e) => {
+            const newTheme = e.target.checked ? 'neon' : 'classic';
+            if (newTheme === 'neon' && localStorage.getItem('ticTacToeNeonUnlocked') !== 'true') {
+                // If neon is locked, revert toggle and show shop or message
+                e.target.checked = false;
+                alert('Unlock Neon Theme in the Shop first!');
+                return;
+            }
+            applyTheme(newTheme);
+            SoundManager.playButtonClick();
+        });
+    }
+
+    // Initialize new features
+    initOnboarding();
+    initSettings();
 
     // Toggle sound on/off
     function toggleSound() {
@@ -720,14 +805,14 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.className = soundEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
         }
         soundToggleBtn.classList.toggle('sound-off', !soundEnabled);
-        
+
         // Initialize audio context when toggling sound on
         if (soundEnabled) {
             SoundManager.ensureAudioContext();
             // Play a sound to indicate toggle
             setTimeout(() => SoundManager.playButtonClick(), 50);
         }
-        
+
         // Save preference to localStorage
         localStorage.setItem('ticTacToeSoundEnabled', soundEnabled.toString());
     }
@@ -736,8 +821,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const body = document.body;
         const t = theme === 'neon' && localStorage.getItem('ticTacToeNeonUnlocked') !== 'true' ? 'classic' : theme;
         body.classList.toggle('theme-neon', t === 'neon');
-        const icon = themeToggle ? themeToggle.querySelector('i') : null;
-        if (icon) icon.className = t === 'neon' ? 'fas fa-moon' : 'fas fa-sun';
+        activeTheme = t;
+        if (settingTheme) settingTheme.checked = t === 'neon';
         localStorage.setItem('ticTacToeTheme', t);
     }
 
@@ -784,18 +869,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { once: true });
         cell.addEventListener('click', addRipple);
     });
-    
+
     restartButton.addEventListener('click', () => {
         SoundManager.ensureAudioContext();
         resetGame();
     });
     restartButton.addEventListener('click', addRipple);
-    
+
     notificationBtn.addEventListener('click', () => {
         SoundManager.ensureAudioContext();
         resetGame();
     });
-    
+
     // Difficulty button listeners
     difficultyButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -804,7 +889,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         btn.addEventListener('click', addRipple);
     });
-    
+
     // Sound toggle button
     if (soundToggleBtn) {
         soundToggleBtn.addEventListener('click', () => {
@@ -812,7 +897,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleSound();
         });
         soundToggleBtn.addEventListener('click', addRipple);
-        
+
         // Load sound preference from localStorage
         const savedSoundPreference = localStorage.getItem('ticTacToeSoundEnabled');
         if (savedSoundPreference !== null) {
@@ -936,14 +1021,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     // Close notification when clicking outside
     notification.addEventListener('click', (e) => {
         if (e.target === notification) {
             hideNotification();
         }
     });
-    
+
     // Initialize game
     loadLeaderboard();
     loadCoins();
@@ -967,7 +1052,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const savedTheme = localStorage.getItem('ticTacToeTheme');
     applyTheme(savedTheme === 'neon' ? 'neon' : 'classic');
-    (function grantDailyBonus(){
+    (function grantDailyBonus() {
         const key = 'ticTacToeDailyLast';
         const last = localStorage.getItem(key);
         const today = new Date().toDateString();
@@ -981,13 +1066,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Hide preloader when page is fully loaded (outside DOMContentLoaded for immediate execution)
-(function() {
+(function () {
     const preloader = document.getElementById('preloader');
     if (!preloader) return;
-    
+
     const loadStartTime = performance.now();
     const minDisplayTime = 1000; // Minimum 1 second display for better UX
-    
+
     function hidePreloader() {
         if (preloader && !preloader.classList.contains('hidden')) {
             preloader.classList.add('hidden');
@@ -999,13 +1084,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 500);
         }
     }
-    
+
     function handleLoad() {
         const elapsed = performance.now() - loadStartTime;
         const remainingTime = Math.max(0, minDisplayTime - elapsed);
         setTimeout(hidePreloader, remainingTime);
     }
-    
+
     // Handle different loading states
     if (document.readyState === 'complete') {
         // Page already loaded
@@ -1020,28 +1105,28 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(hidePreloader, minDisplayTime + 2000);
     }
 })();
-    // PWA: Service Worker registration
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(console.error);
-    }
+// PWA: Service Worker registration
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(console.error);
+}
 
-    // PWA: Install prompt handling
-    let deferredPrompt = null;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (installBtn) installBtn.style.display = 'inline-flex';
-    });
-    window.addEventListener('appinstalled', () => {
+// PWA: Install prompt handling
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.style.display = 'inline-flex';
+});
+window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    if (installBtn) installBtn.style.display = 'none';
+});
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
         deferredPrompt = null;
-        if (installBtn) installBtn.style.display = 'none';
+        installBtn.style.display = 'none';
     });
-    if (installBtn) {
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            deferredPrompt = null;
-            installBtn.style.display = 'none';
-        });
-    }
+}

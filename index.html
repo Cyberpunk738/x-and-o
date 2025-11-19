@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#7b2fff">
 </head>
+
 <body>
     <!-- Preloader -->
     <div id="preloader" class="preloader">
@@ -31,10 +33,11 @@
         <div class="header-controls">
             <h1>Tic Tac Toe</h1>
             <div class="header-buttons">
-                <button id="leaderboardToggle" class="icon-btn" title="Leaderboard"><i class="fas fa-trophy"></i></button>
-                <button id="themeToggle" class="icon-btn" title="Toggle Theme"><i class="fas fa-sun"></i></button>
-                <button id="soundToggle" class="sound-toggle" title="Toggle Sound"><i class="fas fa-volume-up"></i></button>
-                <button id="installBtn" class="icon-btn" title="Install App" style="display:none"><i class="fas fa-download"></i></button>
+                <button id="leaderboardToggle" class="icon-btn" title="Leaderboard"><i
+                        class="fas fa-trophy"></i></button>
+                <button id="settingsToggle" class="icon-btn" title="Settings"><i class="fas fa-cog"></i></button>
+                <button id="installBtn" class="icon-btn" title="Install App" style="display:none"><i
+                        class="fas fa-download"></i></button>
             </div>
         </div>
         <p class="subtitle">You are <span class="player-x">X</span> | Computer is <span class="player-o">O</span></p>
@@ -163,6 +166,83 @@
         </div>
     </div>
 
+    <!-- Onboarding Modal -->
+    <div id="onboarding" class="onboarding hidden">
+        <div class="onboarding-content">
+            <div class="onboarding-slides">
+                <div class="slide active" data-step="1">
+                    <div class="slide-icon"><i class="fas fa-gamepad"></i></div>
+                    <h2>Welcome to Tic Tac Toe!</h2>
+                    <p>Experience the classic game with a modern twist. Play against our smart AI and climb the
+                        leaderboard.</p>
+                </div>
+                <div class="slide" data-step="2">
+                    <div class="slide-icon"><i class="fas fa-coins"></i></div>
+                    <h2>Earn & Upgrade</h2>
+                    <p>Win games to earn coins and gems. Use them to unlock cool themes and power-ups in the shop.</p>
+                </div>
+                <div class="slide" data-step="3">
+                    <div class="slide-icon"><i class="fas fa-trophy"></i></div>
+                    <h2>Compete</h2>
+                    <p>Track your stats and aim for the highest win rate. Can you beat the Hard difficulty?</p>
+                </div>
+            </div>
+            <div class="onboarding-controls">
+                <div class="slide-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <button id="nextSlideBtn" class="btn-primary">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="settings-modal hidden">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button id="closeSettings" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="settings-body">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Sound Effects</span>
+                        <span class="setting-desc">Enable game sounds</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="settingSound" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Dark Mode</span>
+                        <span class="setting-desc">Switch to neon theme</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="settingTheme">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Music</span>
+                        <span class="setting-desc">Background music</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="settingMusic">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-footer">
+                <div class="app-version">Version 2.0.0</div>
+            </div>
+        </div>
+    </div>
+
     <div id="markSelect" class="mark-select hidden">
         <div class="mark-select-content">
             <h2>Choose Your Mark</h2>
@@ -175,4 +255,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
