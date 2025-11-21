@@ -7,7 +7,7 @@
     <title>Tic Tac Toe - Play Against Computer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3.0">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#7b2fff">
 </head>
@@ -29,18 +29,25 @@
         </div>
     </div>
 
+    <!-- Main Game Container -->
     <div class="container">
         <div class="header-controls">
             <h1>Tic Tac Toe</h1>
             <div class="header-buttons">
-                <button id="leaderboardToggle" class="icon-btn" title="Leaderboard"><i
-                        class="fas fa-trophy"></i></button>
-                <button id="settingsToggle" class="icon-btn" title="Settings"><i class="fas fa-cog"></i></button>
-                <button id="installBtn" class="icon-btn" title="Install App" style="display:none"><i
-                        class="fas fa-download"></i></button>
+                <button id="leaderboardToggle" class="icon-btn" title="Leaderboard">
+                    <i class="fas fa-trophy"></i>
+                </button>
+                <button id="settingsToggle" class="icon-btn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button id="installBtn" class="icon-btn" title="Install App" style="display:none">
+                    <i class="fas fa-download"></i>
+                </button>
             </div>
         </div>
+
         <p class="subtitle">You are <span class="player-x">X</span> | Computer is <span class="player-o">O</span></p>
+
         <div class="difficulty-selector">
             <label for="difficulty">Difficulty:</label>
             <div class="difficulty-buttons">
@@ -49,7 +56,9 @@
                 <button class="difficulty-btn" data-difficulty="hard">Hard</button>
             </div>
         </div>
+
         <div id="status" class="status">Your Turn</div>
+
         <div class="game-board" id="gameBoard">
             <div class="cell" data-index="0"></div>
             <div class="cell" data-index="1"></div>
@@ -61,34 +70,47 @@
             <div class="cell" data-index="7"></div>
             <div class="cell" data-index="8"></div>
         </div>
+
         <div class="game-footer">
-            <button id="restart" class="btn-restart"><i class="fas fa-sync-alt"></i> New Game</button>
+            <button id="restart" class="btn-restart">
+                <i class="fas fa-sync-alt"></i> New Game
+            </button>
         </div>
     </div>
 
+    <!-- HUD (Heads-Up Display) -->
     <div class="hud">
         <div class="hud-item" id="coinsHUD" title="Coins">
             <i class="fas fa-coins"></i>
             <span id="coinCount">0</span>
-            <button class="hud-plus" data-open-shop="coins"><i class="fas fa-plus"></i></button>
+            <button class="hud-plus" data-open-shop="coins">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
         <div class="hud-item" id="energyHUD" title="Energy">
             <i class="fas fa-bolt"></i>
             <span id="energyCount">0</span>
-            <button class="hud-plus" data-open-shop="energy"><i class="fas fa-plus"></i></button>
+            <button class="hud-plus" data-open-shop="energy">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
         <div class="hud-item" id="gemsHUD" title="Gems">
             <i class="fas fa-gem"></i>
             <span id="gemCount">0</span>
-            <button class="hud-plus" data-open-shop="gems"><i class="fas fa-plus"></i></button>
+            <button class="hud-plus" data-open-shop="gems">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
     </div>
 
-    <div id="shop" class="shop hidden">
-        <div class="shop-content">
-            <div class="shop-header">
+    <!-- Shop Modal -->
+    <div id="shop" class="modal hidden">
+        <div class="modal-content shop-content">
+            <div class="modal-header">
                 <h2>Shop</h2>
-                <button id="closeShop" class="close-btn"><i class="fas fa-times"></i></button>
+                <button id="closeShop" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="shop-items">
                 <div class="shop-item">
@@ -126,11 +148,13 @@
     </div>
 
     <!-- Leaderboard Modal -->
-    <div id="leaderboard" class="leaderboard hidden">
-        <div class="leaderboard-content">
-            <div class="leaderboard-header">
+    <div id="leaderboard" class="modal hidden">
+        <div class="modal-content leaderboard-content">
+            <div class="modal-header">
                 <h2>Leaderboard</h2>
-                <button id="closeLeaderboard" class="close-btn"><i class="fas fa-times"></i></button>
+                <button id="closeLeaderboard" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="leaderboard-stats">
                 <div class="stat-item">
@@ -151,24 +175,28 @@
                 </div>
             </div>
             <div class="leaderboard-actions">
-                <button id="resetStats" class="btn-reset"><i class="fas fa-redo"></i> Reset Stats</button>
+                <button id="resetStats" class="btn-reset">
+                    <i class="fas fa-redo"></i> Reset Stats
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Notification Modal -->
-    <div id="notification" class="notification hidden">
-        <div class="notification-content">
+    <div id="notification" class="modal hidden">
+        <div class="modal-content notification-content">
             <div class="notification-icon" id="notificationIcon"></div>
             <h2 id="notificationTitle"></h2>
             <p id="notificationMessage"></p>
-            <button id="notificationBtn" class="btn-notification"><i class="fas fa-redo"></i> Play Again</button>
+            <button id="notificationBtn" class="btn-notification">
+                <i class="fas fa-redo"></i> Play Again
+            </button>
         </div>
     </div>
 
     <!-- Onboarding Modal -->
-    <div id="onboarding" class="onboarding hidden">
-        <div class="onboarding-content">
+    <div id="onboarding" class="modal hidden">
+        <div class="modal-content onboarding-content">
             <div class="onboarding-slides">
                 <div class="slide active" data-step="1">
                     <div class="slide-icon"><i class="fas fa-gamepad"></i></div>
@@ -199,17 +227,19 @@
     </div>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="settings-modal hidden">
-        <div class="settings-content">
-            <div class="settings-header">
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content settings-content">
+            <div class="modal-header">
                 <h2>Settings</h2>
-                <button id="closeSettings" class="close-btn"><i class="fas fa-times"></i></button>
+                <button id="closeSettings" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="settings-body">
                 <div class="setting-item">
                     <div class="setting-info">
-                        <span class="setting-label">Sound Effects</span>
-                        <span class="setting-desc">Enable game sounds</span>
+                        <div class="setting-label">Sound Effects</div>
+                        <div class="setting-desc">Enable game sounds</div>
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="settingSound" checked>
@@ -218,8 +248,8 @@
                 </div>
                 <div class="setting-item">
                     <div class="setting-info">
-                        <span class="setting-label">Dark Mode</span>
-                        <span class="setting-desc">Switch to neon theme</span>
+                        <div class="setting-label">Dark Mode</div>
+                        <div class="setting-desc">Switch to neon theme</div>
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="settingTheme">
@@ -228,8 +258,8 @@
                 </div>
                 <div class="setting-item">
                     <div class="setting-info">
-                        <span class="setting-label">Music</span>
-                        <span class="setting-desc">Background music</span>
+                        <div class="setting-label">Music</div>
+                        <div class="setting-desc">Background music</div>
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="settingMusic">
@@ -243,17 +273,7 @@
         </div>
     </div>
 
-    <div id="markSelect" class="mark-select hidden">
-        <div class="mark-select-content">
-            <h2>Choose Your Mark</h2>
-            <div class="mark-select-buttons">
-                <button id="chooseX" class="mark-btn">X</button>
-                <button id="chooseO" class="mark-btn">O</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <script src="script.js?v=3.0"></script>
 </body>
 
 </html>
