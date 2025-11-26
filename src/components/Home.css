@@ -1,0 +1,229 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* --- Header --- */
+.home-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    /* Don't block clicks on main content */
+    z-index: 10;
+}
+
+.home-stats {
+    position: fixed;
+    /* Use fixed to match HUD behavior */
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* Match HUD gap */
+    pointer-events: auto;
+}
+
+/* HUD-like Stats Style */
+.stat-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(10, 10, 20, 0.6);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 3px solid #00f3ff;
+    border-radius: 0 8px 8px 0;
+    /* Match HUD radius */
+    padding: 8px 16px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+    width: fit-content;
+}
+
+.stat-item:hover {
+    transform: translateX(5px);
+    background: rgba(20, 20, 40, 0.8);
+}
+
+.stat-item .stat-icon {
+    font-size: 1rem;
+    filter: drop-shadow(0 0 5px currentColor);
+}
+
+.add-btn {
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #fff;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    margin-left: 8px;
+}
+
+.add-btn:hover {
+    opacity: 1;
+    color: #00f3ff;
+}
+
+/* Resource Colors */
+.stat-item.fire {
+    border-left-color: #ff4d4d;
+}
+
+.stat-item.fire .stat-icon {
+    color: #ff4d4d;
+}
+
+.stat-item.energy {
+    border-left-color: #00f3ff;
+}
+
+.stat-item.energy .stat-icon {
+    color: #00f3ff;
+}
+
+.stat-item.gems {
+    border-left-color: #bc13fe;
+}
+
+.stat-item.gems .stat-icon {
+    color: #bc13fe;
+}
+
+.stat-item.coins {
+    border-left-color: #ffd700;
+}
+
+.stat-item.coins .stat-icon {
+    color: #ffd700;
+}
+
+/* Profile Icon - Top Right Edge */
+.profile-icon {
+    position: fixed;
+    /* Symmetric to stats */
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #bc13fe, #00f3ff);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #fff;
+    box-shadow: 0 0 15px #bc13fe;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.2s;
+    z-index: 100;
+}
+
+.profile-icon:hover {
+    transform: scale(1.1);
+}
+
+.profile-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+}
+
+/* --- Main Content --- */
+.home-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    text-align: center;
+    padding-top: 80px;
+}
+
+.home-title {
+    font-size: 2.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px #00f3ff;
+    margin-bottom: 20px;
+}
+
+.play-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.play-btn {
+    padding: 15px;
+    border-radius: 16px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-transform: capitalize;
+    border: none;
+    cursor: pointer;
+}
+
+.play-btn:active {
+    transform: scale(0.95);
+}
+
+.btn-human {
+    background: linear-gradient(90deg, #ff4d4d, #ff0055);
+    box-shadow: 0 5px 15px rgba(255, 0, 85, 0.4);
+}
+
+.btn-ai {
+    background: linear-gradient(90deg, #00f3ff, #0066ff);
+    box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+}
+
+/* --- Footer Nav --- */
+.home-footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px;
+    background: rgba(20, 20, 35, 0.8);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+    width: 100%;
+}
+
+.nav-item {
+    font-size: 1.5rem;
+    color: #8a8a9b;
+    transition: color 0.3s, transform 0.3s;
+    background: none;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: #00f3ff;
+    transform: translateY(-3px);
+    text-shadow: 0 0 10px #00f3ff;
+}
+
+.nav-item.active {
+    color: #fff;
+    background: radial-gradient(circle, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
+}
