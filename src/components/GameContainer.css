@@ -235,4 +235,7 @@
     .player-o {
         order: 3;
     }
+    .mode-badge {
+        margin-top: 2.5rem;
+    }
 }

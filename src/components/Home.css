@@ -204,6 +204,8 @@
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     margin-top: auto;
     width: 100%;
+    border-radius: 20px;
+    margin: 2;
 }
 
 .nav-item {
@@ -226,4 +228,17 @@
 .nav-item.active {
     color: #fff;
     background: radial-gradient(circle, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
+}
+
+@media (max-width: 900px) {
+    .home-stats{
+        height: 10vh;
+    }
+   
+}
+
+@media (max-width: 400px) {
+     h1.home-title  {
+        margin-top: 10rem;
+    }
 }

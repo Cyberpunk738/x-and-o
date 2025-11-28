@@ -104,6 +104,7 @@
         width: 95%;
         justify-content: center;
         gap: 8px;
+        display: none;
     }
 
     .hud-item {

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useSoundManager } from '../hooks/useSoundManager';
 import { checkGameStatus } from '../utils/gameLogic';
-import { easyAIMove, mediumAIMove, hardAIMove } from '../utils/aiLogic';
+import { easyAIMove, mediumAIMove, hardAIMove, impossibleAIMove } from '../utils/aiLogic';
 import Preloader from './Preloader';
 import HUD from './HUD';
 import GameContainer from './GameContainer';
@@ -87,25 +87,22 @@ function App() {
             let move = -1;
 
             // TODO: Update AI logic for larger boards when implemented
-            if (boardSize === '3x3') {
-                switch (difficulty) {
-                    case 'easy':
-                        move = easyAIMove(gameState);
-                        break;
-                    case 'medium':
-                        move = mediumAIMove(gameState, computerPlayer, humanPlayer);
-                        break;
-                    case 'hard':
-                    case 'impossible':
-                        move = hardAIMove(gameState, computerPlayer, humanPlayer);
-                        break;
-                }
-            } else {
-                // Fallback for other sizes - random move for now
-                const availableMoves = gameState.map((cell, index) => cell === '' ? index : null).filter(val => val !== null);
-                if (availableMoves.length > 0) {
-                    move = availableMoves[Math.floor(Math.random() * availableMoves.length)];
-                }
+            // AI Logic for all board sizes
+            switch (difficulty) {
+                case 'easy':
+                    move = easyAIMove(gameState);
+                    break;
+                case 'medium':
+                    move = mediumAIMove(gameState, computerPlayer, humanPlayer);
+                    break;
+                case 'hard':
+                    move = hardAIMove(gameState, computerPlayer, humanPlayer);
+                    break;
+                case 'impossible':
+                    move = impossibleAIMove(gameState, computerPlayer, humanPlayer);
+                    break;
+                default:
+                    move = easyAIMove(gameState);
             }
 
             if (move !== -1 && gameState[move] === '') {
